@@ -22,6 +22,7 @@ app.layout = html.Div([
     dcc.Graph(id='annual_by_borough_chart'),
     dcc.Dropdown(id='industry_dropdown',
                  multi=True,
+                 value=['Car Wash'],
                  options=[{'label': i, 'value': i}
                           for i in industries]),
     dcc.Graph(id='by_industry_map_chart')
@@ -39,6 +40,25 @@ def plot_annual_by_borogh(borough):
     fig.layout.yaxis.title = 'Number of Businesses Established'
     return fig.to_dict()
 
+
+@app.callback(Output('by_industry_map_chart', 'figure'),
+              [Input('industry_dropdown', 'value')])
+def plot_businesses_by_industry_on_map(industries):
+    fig = go.Figure()
+    for industry in industries:
+        df = data[data['Industry'] == industry]
+        fig.add_scattermapbox(lat=df['Latitude'],
+                              lon=df['Longitude'],
+                              name=industry, marker={'size': 8})
+    fig.layout.title = 'Business Locations: ' + ', '.join(industries)
+    fig.layout.mapbox.style = 'stamen-toner'
+    fig.layout.mapbox.center = {'lat': 40.64925, 'lon': -74.0055}
+    fig.layout.mapbox.zoom = 8
+    fig.layout.geo.lataxis = go.layout.geo.Lataxis(range=[40.4, 40.8985])
+    fig.layout.geo.lonaxis = go.layout.geo.Lonaxis(range=[-74.3, -73.711])
+    fig.layout.height = 700
+
+    return fig.to_dict()
 
 if __name__ == '__main__':
     app.run_server(debug=True)
