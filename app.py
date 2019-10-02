@@ -27,6 +27,9 @@ def plot_annual_by_borogh(borough):
     timeseries = df.set_index('License Creation Date').resample('A').count()['Industry']
     fig = go.Figure()
     fig.add_bar(x=timeseries.index, y=timeseries.values)
+    fig.layout.title = 'Businesses Established by Year'
+    fig.layout.xaxis.title = 'Year'
+    fig.layout.yaxis.title = 'Number of Businesses Established'
     return fig.to_dict()
 
 
