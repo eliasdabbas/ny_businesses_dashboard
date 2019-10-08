@@ -68,7 +68,10 @@ def plot_businesses_by_industry_on_map(industries):
         df = data[data['Industry'] == industry]
         fig.add_scattermapbox(lat=df['Latitude'],
                               lon=df['Longitude'],
-                              name=industry, marker={'size': 8})
+                              hoverlabel={'namelength': 100},
+                              hoverinfo='text+name',
+                              text='<b>'+df['Business Name'].astype(str) + '</b><br><br>Established: ' + df['License Creation Date'].astype(str),
+                              name=industry, marker={'size': 15, 'opacity': 0.6})
     fig.layout.title = ('Business Locations: ' + ', '.join(industries) +
                         '<br>double-click to get back to original zoom')
     fig.layout.font = {'color': '#eeeeee'}
@@ -76,7 +79,7 @@ def plot_businesses_by_industry_on_map(industries):
     fig.layout.plot_bgcolor = 'black'
     fig.layout.mapbox.style = 'stamen-toner'
     fig.layout.mapbox.center = {'lat': 40.64925, 'lon': -74.0055}
-    fig.layout.mapbox.zoom = 8
+    fig.layout.mapbox.zoom = 9
     fig.layout.geo.lataxis = go.layout.geo.Lataxis(range=[40.4, 40.8985])
     fig.layout.geo.lonaxis = go.layout.geo.Lonaxis(range=[-74.3, -73.711])
     fig.layout.height = 700
